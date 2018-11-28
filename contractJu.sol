@@ -5,7 +5,7 @@ interface tokenRecipient { function receiveApproval(address _from, uint256 _valu
 contract contractJu {
     
     // Public variables of the contract
-    enum UserType {coordinator, validator, colector}
+    enum UserType {undefined, coordinator, validator, colector}
     uint256 private lastItem;               //number of the last generated item
     address private coordinatorAddress;     //address of the coordinator
     
@@ -18,14 +18,26 @@ contract contractJu {
         uint256 id;
         string manufacturer;
         string model;
-        string fabricationYear;
+        uint256 fabricationYear;
         string serialNumber;
         bool valid;
+        address validator;
+        string validationDate;
         Historic[] ownersHistoric;
     }
     
     mapping (address => mapping (uint256 => Item)) inventories;
     mapping (address => UserType) userTypes;
+    
+    modifier onlyCoordinator {
+        require(msg.sender == coordinatorAddress);
+        _;
+    }
+    
+    modifier onlyValidator {
+        require(userTypes[msg.sender] == UserType.validator);
+        _;
+    }
     
     /**
      * Constructor function
@@ -40,38 +52,22 @@ contract contractJu {
         userTypes[coordinatorAddress] = UserType.coordinator;
     }
     
-    function getUserType(address _user) public returns (UserType){
+    function getUserType(address _user) public view returns (UserType){
         return userTypes[_user];
     }
 
-
-    // ??? This generates a public event on the blockchain that will notify clients
-    event Transfer(address indexed from, address indexed to, uint256 value);
+    function createValidator(address _newCoordinator) onlyCoordinator public returns (bool success) {
+        userTypes[_newCoordinator] = UserType.validator;
+        return true;
+    }
     
-    // ??? This generates a public event on the blockchain that will notify clients
-    event Approval(address indexed _owner, address indexed _spender, uint256 _value);
+    function validate(address _owner, uint256 _itemId) onlyValidator public returns (bool success) {
+        //acessar o owner, verificar se tem o item, setar para valido e registrar o endereço do validador
+        return true;
+    }
+    
+    /////////////////////////////////////////////////////////////////////////////
 
-    // ??? This notifies clients about the amount burnt
-    event Burn(address indexed from, uint256 value);
-
-    /**
-     * Transfer tokens
-     *
-     * Send `_value` tokens to `_to` from your account
-     *
-     * @param _to The address of the recipient
-     * @param _value the amount to send
-     */
-
-    /**
-     * Transfer tokens from other address
-     *
-     * Send `_value` tokens to `_to` on behalf of `_from`
-     *
-     * @param _from The address of the sender
-     * @param _to The address of the recipient
-     * @param _value the amount to send
-     */
     function transferItemTo(address _from, address _to, uint256 _value) public returns (bool success) {
         //tira de um
         //coloca no outro
@@ -87,23 +83,9 @@ contract contractJu {
     }
     
     //To do: criar um item no endereço do sender, cobrando algo e pedindo verificação de confiavel.
-    function createItem(address _from, address _to, uint256 _value) public returns (bool success) {
-        
+    function createItem(string _manufacturer, string _model, uint256 _year, string _serial) public returns (bool success) {
         //dá chave única para o item
         //criado como não validado
-        return true;
-    }
-    
-    //To do: adiciona um endereço como verificador. Verificador só valida, não tem instrumentos.
-    function createValidator(address _from, address _to, uint256 _value) public returns (bool success) {
-        //ver se sender tem permissão para criar validador
-        return true;
-    }
-    
-    function validate(address _from, address _to, uint256 _value) public returns (bool success) {
-        //verificar se sender é validator
-        //tranferir dinheiros de um lugar pro outro?
-        //mudar o status do item para validado, registrar a data e o validador no historico do item
         return true;
     }
     
