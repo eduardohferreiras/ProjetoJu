@@ -5,9 +5,10 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta http-equiv="X-UA-Compatible" content="ie-edge">
   <title>Document</title>
-
-  <link rel="stylesheet" type="text/css" href="main.css">
+  <script type="http://code.jquery.com/jquery-3.2.1.slim.min.js"></script>
   <script type="./node_modules/web3/dist/web3.min.js"></script>
+  <link rel="stylesheet" type="text/css" href="main.css">
+  <script type="text/javascript" src="script.js"></script>
 </head>
 
 <body>
@@ -18,16 +19,6 @@
 
     <button>BUTÃO</button>
   </div>
-
-  <script type="http://code.jquery.com/jquery-3.2.1.slim.min.js"></script>
-
-  <script >
-    if (typeof web3 !== 'undefined') {
-      web3 = new Web3(web3.currentProvider);
-    } else {
-      web3 = new Web3(new web3.providers.HttpProviders('http://localhost:8545'));
-    }
-  </script>
 
 </body>
 </html>
