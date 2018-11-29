@@ -57,10 +57,22 @@ contract contractJu {
         return userTypes[_user];
     }
     
-   function getItem(uint256 id, address owner) public view returns (string) {
+   function getItemModel(uint256 id, address owner) public view returns (string) {
         return inventories[owner][id].model;
     }
-
+    
+    function getItemSerial(uint256 id, address owner) public view returns (string) {
+        return inventories[owner][id].serialNumber;
+    }
+    
+    function getItemYear(uint256 id, address owner) public view returns (uint256) {
+        return inventories[owner][id].fabricationYear;
+    }
+    
+    function getItemManufacturer(uint256 id, address owner) public view returns (string) {
+        return inventories[owner][id].manufacturer;
+    }
+    
     function createValidator(address _newCoordinator) onlyCoordinator public returns (bool success) {
         userTypes[_newCoordinator] = UserType.validator;
         return true;
