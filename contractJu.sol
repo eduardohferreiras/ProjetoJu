@@ -28,7 +28,7 @@ contract contractJu {
     
     mapping (address => mapping (uint256 => Item)) inventories;
     mapping (address => UserType) userTypes;
-    mapping (address => uint[]) itemsPerUser;
+    mapping (address => uint256[]) itemsPerUser;
     
     modifier onlyCoordinator {
         require(msg.sender == coordinatorAddress);
@@ -132,5 +132,16 @@ contract contractJu {
         //fazer alguma coisa para impedir a criação de um similar
         
     }
+    
+    
+    //Retorna o id do i-ésimo item do usuário owner
+    function getItemId(address _owner, uint _i)public view returns (uint256){
+        if(itemsPerUser[_owner].length >= _i)
+            return itemsPerUser[_owner][_i-1];
+        else
+            return 0;
+    }
+    
+    
 
 }
