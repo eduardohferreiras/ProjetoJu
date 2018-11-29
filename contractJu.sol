@@ -11,7 +11,7 @@ contract contractJu {
     
     struct Historic {
         address owner;
-        string startDate;
+        uint startDate;
     }
     
     struct Item {
@@ -22,12 +22,13 @@ contract contractJu {
         string serialNumber;
         bool valid;
         address validator;
-        string validationDate;
+        uint validationDate;
         Historic[] ownersHistoric;
     }
     
     mapping (address => mapping (uint256 => Item)) inventories;
     mapping (address => UserType) userTypes;
+    mapping (address => uint[]) itemsPerUser;
     
     modifier onlyCoordinator {
         require(msg.sender == coordinatorAddress);
@@ -54,6 +55,10 @@ contract contractJu {
     
     function getUserType(address _user) public view returns (UserType){
         return userTypes[_user];
+    }
+    
+   function getItem(uint256 id, address owner) public view returns (string) {
+        return inventories[owner][id].model;
     }
 
     function createValidator(address _newCoordinator) onlyCoordinator public returns (bool success) {
@@ -82,17 +87,38 @@ contract contractJu {
         return true;
     }
     
-    //To do: criar um item no endereço do sender, cobrando algo e pedindo verificação de confiavel.
+    //To do: criar um item no endereço do sender, cobrando algo ...
+    // ... e pedindo verificação (cancelado)
     function createItem(string _manufacturer, string _model, uint256 _year, string _serial) public returns (bool success) {
         //dá chave única para o item
         //criado como não validado
+        
+        
+        lastItem = lastItem+1;
+        var item = inventories[msg.sender][lastItem];
+        item.id = lastItem;
+        item.manufacturer = _manufacturer;
+        item.model = _model;
+        item.fabricationYear = _year;
+        item.serialNumber = _serial;
+        item.valid = false;
+        item.validator = 0;
+        item.validationDate = 0;
+        
+        var newHistoric = Historic(msg.sender, block.timestamp);
+        item.ownersHistoric.push(newHistoric) -1;
+        itemsPerUser[msg.sender].push(lastItem) -1;
+        
         return true;
     }
+
+
     
     function declareRobbery(uint256 _value) public returns (bool success) {
         //verificar se o item é do sender
         //levantar flag de roubo
         //fazer alguma coisa para impedir a criação de um similar
+        
     }
 
 }
