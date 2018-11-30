@@ -11,7 +11,7 @@ contract contractJu {
     
     struct Historic {
         address owner;
-        string startDate;
+        uint startDate;
     }
     
     struct Item {
@@ -22,12 +22,15 @@ contract contractJu {
         string serialNumber;
         bool valid;
         address validator;
-        string validationDate;
+        uint validationDate;
         Historic[] ownersHistoric;
+        bool robbed;
     }
     
     mapping (address => mapping (uint256 => Item)) inventories;
     mapping (address => UserType) userTypes;
+    mapping (address => uint256[]) itemsPerUser;
+    mapping (string => uint256) serialToID;
     
     modifier onlyCoordinator {
         require(msg.sender == coordinatorAddress);
@@ -55,9 +58,13 @@ contract contractJu {
     function getUserType(address _user) public view returns (UserType){
         return userTypes[_user];
     }
+    
+   function getItem(string serial, address owner) public view returns (string) {
+        return inventories[owner][serialToID[serial]].model;
+    }
 
-    function createValidator(address _newCoordinator) onlyCoordinator public returns (bool success) {
-        userTypes[_newCoordinator] = UserType.validator;
+    function createValidator(address _newValidator) onlyCoordinator public returns (bool success) {
+        userTypes[_newValidator] = UserType.validator;
         return true;
     }
     
@@ -67,32 +74,76 @@ contract contractJu {
     }
     
     /////////////////////////////////////////////////////////////////////////////
-
-    function transferItemTo(address _from, address _to, uint256 _value) public returns (bool success) {
+    
+    function transferItem(address _from, address _to, uint256 _id) public returns (bool success) {
         //tira de um
         //coloca no outro
         //atualizar histórico
-        return true;
+        
+        var itemTransferred = inventories[_from][_id];
+        
+        if (itemTransferred.valid) {
+            
+            var newHistoric = Historic(_to, block.timestamp);
+            itemTransferred.ownersHistoric.push(newHistoric) -1;
+            
+            // registrar a transferencia no array itemsPerUser
+            delete itemsPerUser[_from][_id];
+            itemsPerUser[_to].push(_id) -1;
+            
+            // registrar a transferencia no mapa
+            delete inventories[_from][_id];
+            inventories[_to][_id] = itemTransferred;
+            
+            return true;
+        }
+        
+        return false;
     }
     
-    function transferItemFrom(address _from, address _to, uint256 _value) public returns (bool success) {
-        //tira de um
-        //coloca no outro
-        //atualizar histórico
-        return true;
-    }
-    
-    //To do: criar um item no endereço do sender, cobrando algo e pedindo verificação de confiavel.
+    //To do: criar um item no endereço do sender, cobrando algo ...
+    // ... e pedindo verificação (cancelado)
     function createItem(string _manufacturer, string _model, uint256 _year, string _serial) public returns (bool success) {
         //dá chave única para o item
         //criado como não validado
+        
+        
+        lastItem = lastItem+1;
+        var item = inventories[msg.sender][lastItem];
+        item.id = lastItem;
+        item.manufacturer = _manufacturer;
+        item.model = _model;
+        item.fabricationYear = _year;
+        item.serialNumber = _serial;
+        item.valid = false;
+        item.validator = 0;
+        item.validationDate = 0;
+        
+        var newHistoric = Historic(msg.sender, block.timestamp);
+        item.ownersHistoric.push(newHistoric) -1;
+        item.robbed = false;
+        
+        itemsPerUser[msg.sender].push(lastItem) -1;
+        
+        serialToID[_serial] = lastItem;
+        
         return true;
     }
+
+
     
-    function declareRobbery(uint256 _value) public returns (bool success) {
+    function declareRobbery(uint256 _id) public returns (bool success) {
         //verificar se o item é do sender
         //levantar flag de roubo
         //fazer alguma coisa para impedir a criação de um similar
+        
+        if (itemsPerUser[msg.sender][_id] != 0) {
+            // usuario contem o item _id
+            var item = inventories[msg.sender][_id];
+            if (item.valid) {
+                item.robbed = true;
+            }
+        }
     }
 
 }
