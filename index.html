@@ -49,9 +49,6 @@
             <div>
                 <h2>Transfer Item</h2>
 
-                <label for="tFrom" class="col-lg-2 control-label">From</label>
-                <input id="tFrom" type="text">
-
                 <label for="tTo" class="col-lg-2 control-label">To</label>
                 <input id="tTo" type="text">
 
@@ -178,7 +175,6 @@
 
         $('#tButton').click(function(){
             Ju.transferItemTo(
-                $('#tFrom').val(),
                 $('#tTo').val(),
                 $('#tSerial').val(),
                 sucess => {console.log(sucess);
