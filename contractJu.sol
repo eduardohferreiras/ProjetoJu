@@ -145,5 +145,7 @@ contract contractJu {
             }
         }
     }
+    
+    
 
 }
