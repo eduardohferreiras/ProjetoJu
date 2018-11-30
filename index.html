@@ -55,7 +55,7 @@
                 <label for="tSerial" class="col-lg-2 control-label">Serial</label>
                 <input id="tSerial" type="text">
 
-                <button id="cButton">Create</button>
+                <button id="tButton">Transfer</button>
             </div>
             <div>
                 <h2>Informar perda</h2>
@@ -63,7 +63,7 @@
                 <label for="name" class="col-lg-2 control-label">Hash</label>
                 <input id="age3" type="text">
 
-                <button id="iButton">Update Instructor</button>
+                <button id="iButton">Update</button>
             </div>
         </div>
         <div id="validatorZone">
@@ -75,7 +75,7 @@
             <label for="vItemid" class="col-lg-2 control-label">Item Id</label>
             <input id="vItemid" type="text">
 
-            <button id="vButton">Create</button>
+            <button id="vButton">Validate</button>
         </div>
         <div id="coordinatorZone">
             <h2>Create Validator</h2>
@@ -174,11 +174,11 @@
         });
 
         $('#tButton').click(function(){
-            Ju.transferItemTo(
+            Ju.transferItem(
                 $('#tTo').val(),
                 $('#tSerial').val(),
                 sucess => {console.log(sucess);
-                showItems();}
+                }
             );
         });
 
@@ -189,7 +189,7 @@
                 $('#cYear').val(),
                 $('#cSerial').val(),
                 sucess => {console.log(sucess);
-                showItems();}
+                }
             );
         });
 
