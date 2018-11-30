@@ -80,7 +80,7 @@
 
             <button id="vButton">Create</button>
         </div>
-        <div id="coordenatorZone">
+        <div id="coordinatorZone">
             <h2>Create Validator</h2>
 
             <label for="cvAddress" class="col-lg-2 control-label">Address</label>
@@ -103,11 +103,10 @@
 
         web3.eth.defaultAccount = web3.eth.accounts[0];
         var myAddress = web3.eth.defaultAccount;
-        var myContract = web3.eth.contract([ { "constant": false, "inputs": [ { "name": "_manufacturer", "type": "string" }, { "name": "_model", "type": "string" }, { "name": "_year", "type": "uint256" }, { "name": "_serial", "type": "string" } ], "name": "createItem", "outputs": [ { "name": "success", "type": "bool" } ], "payable": false, "stateMutability": "nonpayable", "type": "function" }, { "constant": false, "inputs": [ { "name": "_newValidator", "type": "address" } ], "name": "createValidator", "outputs": [ { "name": "success", "type": "bool" } ], "payable": false, "stateMutability": "nonpayable", "type": "function" }, { "constant": false, "inputs": [ { "name": "_id", "type": "uint256" } ], "name": "declareRobbery", "outputs": [ { "name": "success", "type": "bool" } ], "payable": false, "stateMutability": "nonpayable", "type": "function" }, { "constant": false, "inputs": [ { "name": "_from", "type": "address" }, { "name": "_to", "type": "address" }, { "name": "_id", "type": "uint256" } ], "name": "transferItem", "outputs": [ { "name": "success", "type": "bool" } ], "payable": false, "stateMutability": "nonpayable", "type": "function" }, { "constant": false, "inputs": [ { "name": "_owner", "type": "address" }, { "name": "_itemId", "type": "uint256" } ], "name": "validate", "outputs": [ { "name": "success", "type": "bool" } ], "payable": false, "stateMutability": "nonpayable", "type": "function" }, { "inputs": [], "payable": false, "stateMutability": "nonpayable", "type": "constructor" }, { "constant": true, "inputs": [ { "name": "serial", "type": "string" }, { "name": "owner", "type": "address" } ], "name": "getItem", "outputs": [ { "name": "", "type": "string" } ], "payable": false, "stateMutability": "view", "type": "function" }, { "constant": true, "inputs": [ { "name": "_user", "type": "address" } ], "name": "getUserType", "outputs": [ { "name": "", "type": "uint8" } ], "payable": false, "stateMutability": "view", "type": "function" } ]); // ABI goes here
-
+        var myContract = web3.eth.contract([ { "constant": false, "inputs": [ { "name": "_manufacturer", "type": "string" }, { "name": "_model", "type": "string" }, { "name": "_year", "type": "uint256" }, { "name": "_serial", "type": "string" } ], "name": "createItem", "outputs": [ { "name": "success", "type": "bool" } ], "payable": false, "stateMutability": "nonpayable", "type": "function" }, { "constant": false, "inputs": [ { "name": "_newValidator", "type": "address" } ], "name": "createValidator", "outputs": [ { "name": "success", "type": "bool" } ], "payable": false, "stateMutability": "nonpayable", "type": "function" }, { "constant": false, "inputs": [ { "name": "_id", "type": "uint256" } ], "name": "declareRobbery", "outputs": [ { "name": "success", "type": "bool" } ], "payable": false, "stateMutability": "nonpayable", "type": "function" }, { "constant": false, "inputs": [ { "name": "_owner", "type": "address" }, { "name": "index", "type": "uint256" } ], "name": "getItemsPerUser", "outputs": [ { "components": [ { "name": "id", "type": "uint256" }, { "name": "manufacturer", "type": "string" }, { "name": "model", "type": "string" }, { "name": "fabricationYear", "type": "uint256" }, { "name": "serialNumber", "type": "string" }, { "name": "valid", "type": "bool" }, { "name": "validator", "type": "address" }, { "name": "validationDate", "type": "uint256" }, { "components": [ { "name": "owner", "type": "address" }, { "name": "startDate", "type": "uint256" } ], "name": "ownersHistoric", "type": "tuple[]" }, { "name": "robbed", "type": "bool" } ], "name": "", "type": "tuple" } ], "payable": false, "stateMutability": "nonpayable", "type": "function" }, { "constant": false, "inputs": [ { "name": "_to", "type": "address" }, { "name": "_id", "type": "uint256" } ], "name": "transferItem", "outputs": [ { "name": "success", "type": "bool" } ], "payable": false, "stateMutability": "nonpayable", "type": "function" }, { "constant": false, "inputs": [ { "name": "_owner", "type": "address" }, { "name": "_itemId", "type": "uint256" } ], "name": "validate", "outputs": [ { "name": "success", "type": "bool" } ], "payable": false, "stateMutability": "nonpayable", "type": "function" }, { "inputs": [], "payable": false, "stateMutability": "nonpayable", "type": "constructor" }, { "constant": true, "inputs": [ { "name": "serial", "type": "string" }, { "name": "owner", "type": "address" } ], "name": "getItem", "outputs": [ { "name": "", "type": "string" } ], "payable": false, "stateMutability": "view", "type": "function" }, { "constant": true, "inputs": [ { "name": "_user", "type": "address" } ], "name": "getUserType", "outputs": [ { "name": "", "type": "uint8" } ], "payable": false, "stateMutability": "view", "type": "function" }, { "constant": true, "inputs": [], "name": "isCoordinator", "outputs": [ { "name": "", "type": "bool" } ], "payable": false, "stateMutability": "view", "type": "function" }, { "constant": true, "inputs": [], "name": "isValidator", "outputs": [ { "name": "success", "type": "bool" } ], "payable": false, "stateMutability": "view", "type": "function" } ]);
         console.log(web3.eth.accounts);
 
-        var Ju = myContract.at('0x43e8b024d6dcfd65f7bec9f95b5a7c3213c0dd2e'); // adress goes here
+        var Ju = myContract.at('0xcb9cbe0215db51c63c2ed45c777d5346ff44317e'); // adress goes here
 
         function showItems(){
             var items = [];
@@ -134,25 +133,36 @@
             });
         }
 
-        // var juEvent = gCoin.GuitarEvent().
+        // $('#validatorZone').hide();
+        // $('#coordinatorZone').hide();
 
-        // juEvent.watch(function(error, result){
-        //     if(!error){
-        //         $('#loader').hide();
-        //         $('#name').html(result.args.name);
-        //     } else {
-        //         $('#loader').hide();
-        //         console.log(error);
-        //     }
-        // })
+        var updatedGuitarrasEvent = Ju.updatedGuitarrasEvent();
 
-        // Ju.getName(function(error, result) {
-        //     if(!error){
-        //         $('#name').html("Eae");
-        //     } else {
-        //         console.log(error);
-        //     }
-        // });
+        updatedGuitarrasEvent.watch(function(error, res){
+            if(!error){
+                showItems();
+            } else {
+                console.log(error);
+            }
+        });
+
+        function hideValidator() {
+            Ju.isValidator(result => {
+                console.log(result);
+                if(result){
+                    $('#validatorZone').show();
+                }
+            })
+        }
+
+        function hideCoordinator() {
+            Ju.isCoordinator(result => {
+                console.log(result);
+                if(result){
+                    $('#coordinatorZone').show();
+                }
+            })
+        }
 
         $('#cButton').click(function(){
             Ju.createItem(
@@ -170,7 +180,9 @@
             Ju.transferItemTo(
                 $('#tFrom').val(),
                 $('#tTo').val(),
-                $('#tSerial').val()
+                $('#tSerial').val(),
+                sucess => {console.log(sucess);
+                showItems();}
             );
         });
 
@@ -179,7 +191,9 @@
                 $('#cManufacter').val(),
                 $('#cModel').val(),
                 $('#cYear').val(),
-                $('#cSerial').val()
+                $('#cSerial').val(),
+                sucess => {console.log(sucess);
+                showItems();}
             );
         });
 
@@ -187,7 +201,7 @@
             Ju.validate(
                 $('#vOwner').val(),
                 $('#vItemid').val(),
-                (sucess) => {console.log(sucess)}
+                sucess => {console.log(sucess)}
             );
         });
 
@@ -195,9 +209,13 @@
         $('#cvButton').click(function(){
             Ju.createValidator(
                 $('#cvAddress').val(),
-                (sucess) => {console.log(sucess)}
+                sucess => {console.log(sucess)}
             );
         });
+
+        // showItems();
+        // hideCoordinator();
+        // hideValidator();
 
         console.log(web3);
     </script>

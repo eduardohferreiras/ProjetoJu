@@ -1,4 +1,5 @@
 pragma solidity ^0.4.16;
+pragma experimental ABIEncoderV2;
 
 interface tokenRecipient { function receiveApproval(address _from, uint256 _value, address _token, bytes _extraData) external; }
 
@@ -41,6 +42,17 @@ contract contractJu {
         require(userTypes[msg.sender] == UserType.validator);
         _;
     }
+
+
+
+    function isCoordinator() view public returns (bool) {
+    	//return msg.sender == coordinatorAddress;
+    	return true;
+    }
+
+    function isValidator() view public returns (bool success) {
+    	return userTypes[msg.sender] == UserType.validator;
+    }
     
     /**
      * Constructor function
@@ -75,24 +87,24 @@ contract contractJu {
     
     /////////////////////////////////////////////////////////////////////////////
     
-    function transferItem(address _from, address _to, uint256 _id) public returns (bool success) {
+    function transferItem(address _to, uint256 _id) public returns (bool success) {
         //tira de um
         //coloca no outro
         //atualizar histórico
         
-        var itemTransferred = inventories[_from][_id];
+        Item itemTransferred = inventories[msg.sender][_id];
         
         if (itemTransferred.valid) {
             
-            var newHistoric = Historic(_to, block.timestamp);
+            Historic memory newHistoric = Historic(_to, block.timestamp);
             itemTransferred.ownersHistoric.push(newHistoric) -1;
             
             // registrar a transferencia no array itemsPerUser
-            delete itemsPerUser[_from][_id];
+            delete itemsPerUser[msg.sender][_id];
             itemsPerUser[_to].push(_id) -1;
             
             // registrar a transferencia no mapa
-            delete inventories[_from][_id];
+            delete inventories[msg.sender][_id];
             inventories[_to][_id] = itemTransferred;
             
             return true;
@@ -109,7 +121,7 @@ contract contractJu {
         
         
         lastItem = lastItem+1;
-        var item = inventories[msg.sender][lastItem];
+        Item item = inventories[msg.sender][lastItem];
         item.id = lastItem;
         item.manufacturer = _manufacturer;
         item.model = _model;
@@ -119,7 +131,7 @@ contract contractJu {
         item.validator = 0;
         item.validationDate = 0;
         
-        var newHistoric = Historic(msg.sender, block.timestamp);
+        Historic memory newHistoric = Historic(msg.sender, block.timestamp);
         item.ownersHistoric.push(newHistoric) -1;
         item.robbed = false;
         
@@ -139,13 +151,17 @@ contract contractJu {
         
         if (itemsPerUser[msg.sender][_id] != 0) {
             // usuario contem o item _id
-            var item = inventories[msg.sender][_id];
+            Item item = inventories[msg.sender][_id];
             if (item.valid) {
                 item.robbed = true;
             }
         }
     }
     
-    
+
+    function getItemsPerUser(address _owner, uint index) public returns (Item) {
+    	uint256[] itemList = itemsPerUser[_owner];
+    	return inventories[_owner][itemList[index]];
+    }
 
 }
