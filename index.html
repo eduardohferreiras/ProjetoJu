@@ -25,11 +25,11 @@
         <input id="age" type="text">
 
         <button id="button">Update Instructor</button> -->
-        <div id="guitarras">
-
-        </div>
         <div>
             <h1>Guitarra Coin</h1>
+            <div id="guitarras">
+
+            </div>
             <div>
                 <h2>Create Item</h2>
                 <label for="cManufacter" class="col-lg-2 control-label"> Manufacter</label>
@@ -108,6 +108,31 @@
         console.log(web3.eth.accounts);
 
         var Ju = myContract.at('0x43e8b024d6dcfd65f7bec9f95b5a7c3213c0dd2e'); // adress goes here
+
+        function showItems(){
+            var items = [];
+
+            var response = true;
+
+            while(response){
+                response = Ju.getItemID(myAddress, (res) => {
+                    if(res) items.push(res);
+                });
+            }
+
+            $('#guitarras').empty();
+
+            items.forEach(item => {
+                var tit = $('<h3></h3>').text(item.model);
+                var fab = $('<p></p>').text(item.manufactor);
+                var year = $('<p></p>').text(item.year);
+                var serial = $('<p></p>').text(item.serial);
+
+                var d = $('<div></div>').append(tit, fab, year, serial);
+
+                $('#guitarras').append(d);
+            });
+        }
 
         // var juEvent = gCoin.GuitarEvent().
 

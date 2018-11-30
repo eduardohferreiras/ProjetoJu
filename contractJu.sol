@@ -59,7 +59,7 @@ contract contractJu {
         return userTypes[_user];
     }
     
-   function getItem(string serial, address owner) public view returns (string) {
+    function getItem(string serial, address owner) public view returns (string) {
         return inventories[owner][serialToID[serial]].model;
     }
 
